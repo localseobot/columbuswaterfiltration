@@ -1,26 +1,47 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-50: #eff9ff;
+  --color-brand-100: #dbf1ff;
+  --color-brand-200: #b8e4ff;
+  --color-brand-300: #85d3ff;
+  --color-brand-400: #48b8ff;
+  --color-brand-500: #1e97f5;
+  --color-brand-600: #0a76d4;
+  --color-brand-700: #0a5eab;
+  --color-brand-800: #0e4f8d;
+  --color-brand-900: #123f6f;
+  --color-brand-950: #0c2847;
+
+  --color-teal-accent: #0fb5ba;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-card: 0 1px 3px rgba(15, 40, 71, 0.06),
+    0 8px 24px rgba(15, 40, 71, 0.08);
+}
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f2231;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Water-themed background utilities */
+.bg-water-gradient {
+  background: linear-gradient(135deg, #0c2847 0%, #0a5eab 55%, #0fb5ba 135%);
+}
+
+.bg-water-soft {
+  background: linear-gradient(180deg, #eff9ff 0%, #ffffff 100%);
 }
