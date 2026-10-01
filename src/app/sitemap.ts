@@ -1,25 +1,17 @@
 import type { MetadataRoute } from "next";
+import { indexablePages } from "@/data/dataset";
 import { site } from "@/lib/site";
+
+const EXTRA = ["/about/", "/contact/", "/free-water-test/"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
-    { path: "/", priority: 1.0, changeFrequency: "weekly" as const },
-    { path: "/services", priority: 0.9, changeFrequency: "monthly" as const },
-    {
-      path: "/free-water-test",
-      priority: 0.9,
-      changeFrequency: "monthly" as const,
-    },
-    { path: "/about", priority: 0.7, changeFrequency: "monthly" as const },
-    { path: "/contact", priority: 0.7, changeFrequency: "monthly" as const },
+    ...indexablePages().map((page) => page.path),
+    ...EXTRA,
   ];
-
-  const lastModified = new Date();
-
-  return routes.map((route) => ({
-    url: `${site.url}${route.path}`,
-    lastModified,
-    changeFrequency: route.changeFrequency,
-    priority: route.priority,
+  return routes.map((path) => ({
+    url: path === "/" ? `${site.url}/` : `${site.url}${path}`,
+    changeFrequency: path === "/" ? "weekly" : "monthly",
+    priority: path === "/" ? 1 : path.split("/").filter(Boolean).length === 1 ? 0.8 : 0.6,
   }));
 }
