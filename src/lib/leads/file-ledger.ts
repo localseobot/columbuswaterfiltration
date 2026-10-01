@@ -9,8 +9,7 @@ type FileShape = { leads: Lead[] };
 
 function filePath(): string {
   if (process.env.LEAD_DATA_FILE) return process.env.LEAD_DATA_FILE;
-  // Keep tracing off the rest of the repo. Leads on Vercel belong in Redis.
-  return path.join(/*turbopackIgnore: true*/ process.cwd(), ".data", "leads.json");
+  return path.join(process.cwd(), ".data", "leads.json");
 }
 
 let chain: Promise<unknown> = Promise.resolve();
@@ -26,7 +25,7 @@ function locked<T>(fn: () => Promise<T>): Promise<T> {
 
 async function readFile(): Promise<FileShape> {
   try {
-    const raw = await fs.readFile(filePath(), "utf8");
+    const raw = await fs.readFile(/* turbopackIgnore: true */ filePath(), "utf8");
     const parsed = JSON.parse(raw) as FileShape;
     if (!parsed || !Array.isArray(parsed.leads)) return { leads: [] };
     return parsed;
@@ -38,10 +37,10 @@ async function readFile(): Promise<FileShape> {
 
 async function writeFile(data: FileShape): Promise<void> {
   const file = filePath();
-  await fs.mkdir(path.dirname(file), { recursive: true });
-  const tmp = `${file}.${process.pid}.tmp`;
-  await fs.writeFile(tmp, JSON.stringify(data), "utf8");
-  await fs.rename(tmp, file);
+  await fs.mkdir(/* turbopackIgnore: true */ path.dirname(file), { recursive: true });
+  const tmp = path.join(path.dirname(file), "leads.json.tmp");
+  await fs.writeFile(/* turbopackIgnore: true */ tmp, JSON.stringify(data), "utf8");
+  await fs.rename(/* turbopackIgnore: true */ tmp, /* turbopackIgnore: true */ file);
 }
 
 function addNote(lead: Lead, body: string): Lead {
