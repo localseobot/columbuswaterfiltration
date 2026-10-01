@@ -2,24 +2,24 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import GeneratedPage from "@/components/catalog/GeneratedPage";
 import { buildPageModel } from "@/data/copy";
-import { getPage, locationHubs } from "@/data/dataset";
+import { getPage, neighborhoodPages } from "@/data/dataset";
 import { pageMetadata } from "@/lib/seo";
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return locationHubs()
-    .filter((page) => page.placeSlug && page.placeSlug !== "columbus-oh")
-    .map((page) => ({ slug: page.placeSlug as string }));
+  return neighborhoodPages().map((page) => ({
+    neighborhood: page.placeSlug as string,
+  }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ neighborhood: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const page = getPage(`/service-area/${slug}/`);
+  const { neighborhood } = await params;
+  const page = getPage(`/service-area/columbus-oh/${neighborhood}/`);
   if (!page) return {};
   const model = buildPageModel(page);
   return pageMetadata({
@@ -30,13 +30,13 @@ export async function generateMetadata({
   });
 }
 
-export default async function LocationHubPage({
+export default async function NeighborhoodPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ neighborhood: string }>;
 }) {
-  const { slug } = await params;
-  const page = getPage(`/service-area/${slug}/`);
+  const { neighborhood } = await params;
+  const page = getPage(`/service-area/columbus-oh/${neighborhood}/`);
   if (!page) notFound();
   return <GeneratedPage page={page} />;
 }

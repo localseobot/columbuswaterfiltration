@@ -1,23 +1,26 @@
 import type { Metadata } from "next";
-import { locations, type LocationRecord } from "@/data/locations";
+import { indexablePages } from "@/data/dataset";
 import { site } from "./site";
 
-function schemaPlace(location: LocationRecord) {
-  const type =
-    location.kind === "neighborhood"
-      ? "Neighborhood"
-      : location.kind === "township"
-        ? "AdministrativeArea"
-        : "City";
-  return { "@type": type, name: `${location.name}, ${site.area.state}` };
-}
-
-/** Columbus plus every row in the location catalog. */
-export function areaServedPlaces(only?: LocationRecord) {
-  if (only) return [schemaPlace(only)];
+/** Indexable cities and counties only. Neighborhoods stay on their own pages. */
+export function areaServedPlaces(only?: { name: string; kind?: string }) {
+  if (only) {
+    return [
+      {
+        "@type": only.kind === "county" ? "AdministrativeArea" : "City",
+        name: only.name.includes("County") ? only.name : `${only.name}, ${site.area.state}`,
+      },
+    ];
+  }
+  const places = indexablePages().filter(
+    (page) => page.pageType === "location-hub" || page.pageType === "county-hub",
+  );
   return [
     { "@type": "City", name: `${site.area.city}, ${site.area.state}` },
-    ...locations.map(schemaPlace),
+    ...places.map((page) => ({
+      "@type": page.pageType === "county-hub" ? "AdministrativeArea" : "City",
+      name: page.pageType === "county-hub" ? page.county : `${page.locationName}, ${site.area.state}`,
+    })),
   ];
 }
 
@@ -25,16 +28,20 @@ export function pageMetadata({
   title,
   description,
   path,
+  index = true,
 }: {
   title: string;
   description: string;
   path: string;
+  index?: boolean;
 }): Metadata {
-  const url = path === "/" ? site.url : `${site.url}${path}`;
+  const canonical = path === "/" ? "/" : path.endsWith("/") ? path : `${path}/`;
+  const url = canonical === "/" ? site.url : `${site.url}${canonical}`;
   return {
     title: { absolute: title },
     description,
-    alternates: { canonical: path === "/" ? "/" : path },
+    robots: index ? { index: true, follow: true } : { index: false, follow: true },
+    alternates: { canonical },
     openGraph: {
       type: "website",
       locale: "en_US",
@@ -95,7 +102,7 @@ export function serviceJsonLd(service: {
   name: string;
   description: string;
   path: string;
-  area?: LocationRecord;
+  area?: { name: string; kind?: string };
 }) {
   return {
     "@context": "https://schema.org",

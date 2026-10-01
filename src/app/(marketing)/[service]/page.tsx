@@ -2,24 +2,24 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import GeneratedPage from "@/components/catalog/GeneratedPage";
 import { buildPageModel } from "@/data/copy";
-import { getPage, locationHubs } from "@/data/dataset";
+import { getPage, singleSegmentPages } from "@/data/dataset";
 import { pageMetadata } from "@/lib/seo";
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return locationHubs()
-    .filter((page) => page.placeSlug && page.placeSlug !== "columbus-oh")
-    .map((page) => ({ slug: page.placeSlug as string }));
+  return singleSegmentPages()
+    .filter((page) => page.serviceSlug && page.path !== "/service-area/")
+    .map((page) => ({ service: page.serviceSlug as string }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ service: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const page = getPage(`/service-area/${slug}/`);
+  const { service } = await params;
+  const page = getPage(`/${service}/`);
   if (!page) return {};
   const model = buildPageModel(page);
   return pageMetadata({
@@ -30,13 +30,13 @@ export async function generateMetadata({
   });
 }
 
-export default async function LocationHubPage({
+export default async function ServiceHubPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ service: string }>;
 }) {
-  const { slug } = await params;
-  const page = getPage(`/service-area/${slug}/`);
-  if (!page) notFound();
+  const { service } = await params;
+  const page = getPage(`/${service}/`);
+  if (!page || page.path === "/service-area/") notFound();
   return <GeneratedPage page={page} />;
 }

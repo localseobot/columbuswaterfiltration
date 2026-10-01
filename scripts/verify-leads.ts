@@ -5,9 +5,8 @@
  *   LEAD_DATA_FILE=/tmp/cwf-leads-test.json npx tsx scripts/verify-leads.ts
  */
 import fs from "node:fs";
-import { locations } from "../src/data/locations";
-import { services } from "../src/data/services";
-import { catalogPaths } from "../src/data/catalog";
+import { buildPageModel, pagePlainText } from "../src/data/copy";
+import { allPages, getPlace, indexablePages } from "../src/data/dataset";
 import { buildDashboard } from "../src/lib/leads/dashboard-data";
 import { resetLedgerForTests } from "../src/lib/leads";
 import { parseLeadBody, submitLead } from "../src/lib/leads/submit";
@@ -39,25 +38,64 @@ function assert(cond: unknown, message: string) {
   }
 }
 
-const details = new Set(locations.map((l) => l.utilityDetail));
-assert(details.size === locations.length, "each location needs a unique utility detail");
-for (const loc of locations) {
-  assert(loc.zips.length > 0, `${loc.slug} missing zips`);
-  assert(loc.nearbyPlaces.length > 0, `${loc.slug} missing nearby places`);
-  assert(loc.notes.length > 0, `${loc.slug} missing notes`);
-  assert(loc.utility.length > 10, `${loc.slug} missing utility`);
+const pages = allPages();
+const indexable = indexablePages();
+assert(pages.length === 243, `expected 243 matrix pages, got ${pages.length}`);
+assert(indexable.length === 207, `expected 207 indexable pages, got ${indexable.length}`);
+assert(pages.length - indexable.length === 36, "expected 36 noindex gates");
+assert(
+  indexable.some((p) => p.path === "/water-softener-installation/dublin-oh/"),
+  "dublin softener page is indexable",
+);
+assert(
+  pages.some((p) => p.path === "/service-area/pataskala-oh/" && !p.indexable),
+  "pataskala hub is noindex",
+);
+assert(!pages.some((p) => p.path.includes("/heath-oh/") && p.serviceSlug === "water-softener-installation"), "no Heath softener page");
+
+for (const page of pages) {
+  if (!page.placeSlug) continue;
+  const place = getPlace(page.placeSlug);
+  if (!place || place.zipsDisplay) continue;
+  const text = pagePlainText(buildPageModel(page));
+  for (const zip of place.zips) {
+    assert(!text.includes(zip), `${page.path} displayed approximate ZIP ${zip}`);
+  }
 }
 
-const paths = catalogPaths();
-const combo = services.length * locations.length;
-assert(
-  paths.some((p) => p.path === `/services/${services[0].slug}/${locations[0].slug}`),
-  "sitemap paths include a service × city URL",
-);
-assert(
-  paths.filter((p) => p.path.split("/").length === 4).length === combo,
-  `expected ${combo} combo paths`,
-);
+function shingles(text: string): Set<string> {
+  const words = text.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter(Boolean);
+  const set = new Set<string>();
+  for (let i = 0; i <= words.length - 5; i++) set.add(words.slice(i, i + 5).join(" "));
+  return set;
+}
+function jaccard(a: Set<string>, b: Set<string>): number {
+  let inter = 0;
+  for (const item of a) if (b.has(item)) inter++;
+  const union = a.size + b.size - inter;
+  return union === 0 ? 0 : inter / union;
+}
+
+const byService = new Map<string, { path: string; text: string }[]>();
+for (const page of pages.filter((p) => p.pageType === "service-x-location" || p.pageType === "neighborhood")) {
+  const key = page.pageType === "neighborhood" ? "neighborhood" : page.serviceSlug || page.pageType;
+  const list = byService.get(key) || [];
+  list.push({ path: page.path, text: pagePlainText(buildPageModel(page)) });
+  byService.set(key, list);
+}
+let worst = { score: 0, a: "", b: "" };
+for (const list of byService.values()) {
+  const grams = list.map((item) => ({ ...item, grams: shingles(item.text) }));
+  for (let i = 0; i < grams.length; i++) {
+    for (let j = i + 1; j < grams.length; j++) {
+      const score = jaccard(grams[i].grams, grams[j].grams);
+      if (score > worst.score) worst = { score, a: grams[i].path, b: grams[j].path };
+      assert(score < 0.6, `near-duplicate ${grams[i].path} vs ${grams[j].path} (${score.toFixed(2)})`);
+    }
+  }
+}
+
+const paths = indexable.map((p) => p.path);
 
 async function main() {
 const honeypot = parseLeadBody({ name: "Bot", phone: "6145550100", website: "http://spam" });
@@ -142,10 +180,12 @@ console.log(
       ok: true,
       stored: leads.length,
       emails: sent.length,
-      pages: paths.length,
-      services: services.length,
-      locations: locations.length,
-      combos: combo,
+      pages: pages.length,
+      indexable: indexable.length,
+      noindex: pages.length - indexable.length,
+      sitemap: paths.length,
+      worstSimilarity: Number(worst.score.toFixed(3)),
+      worstPair: [worst.a, worst.b],
     },
     null,
     2,

@@ -1,188 +1,133 @@
 import Link from "next/link";
-import { locations } from "@/data/locations";
-import { services } from "@/data/services";
-import { columbusSupply, sources } from "@/lib/water-facts";
-import { pageMetadata } from "@/lib/seo";
-import { site } from "@/lib/site";
+import type { Metadata } from "next";
 import LeadForm from "@/components/LeadForm";
 import PhoneLink from "@/components/PhoneLink";
-import { Icon, ArrowRightIcon, CheckIcon, DropletIcon } from "@/components/Icons";
-import type { Metadata } from "next";
+import { serviceHubs } from "@/data/dataset";
+import { pageMetadata } from "@/lib/seo";
+import { site } from "@/lib/site";
+import { ArrowRightIcon } from "@/components/Icons";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Water Filtration in Columbus, OH | Whole Home Systems & Softeners",
+  title: "Water Treatment in Columbus, Ohio | Free In-Home Test",
   description:
-    "Whole-home water filtration, water softeners, and reverse osmosis for Columbus, Ohio. Free in-home water test. City water is moderately hard — about 7 grains per gallon after the utility softens it.",
+    "Water treatment in Columbus, Ohio. Softeners, whole-house filters, and reverse osmosis sized from a free in-home test. Columbus already softens to about 7 grains per gallon.",
   path: "/",
 });
 
 const checks = [
   "Hardness, in grains per gallon",
-  "Chlorine and odor",
-  "Iron and sulfur, if you are on a well",
+  "Chlorine taste and odor",
+  "Iron and sulfur on a well",
   "Total dissolved solids",
 ];
 
-const steps = [
-  {
-    number: "01",
-    title: "Free water test",
-    body: "We test at the house: hardness, chlorine, TDS, iron, and odor. The visit is free if you do not buy anything.",
-  },
-  {
-    number: "02",
-    title: "A straight recommendation",
-    body: "Softener, carbon filter, reverse osmosis, well treatment, or nothing. The test decides. We do not list prices on this site.",
-  },
-  {
-    number: "03",
-    title: "Install at the house",
-    body: "The system goes in at the house, usually in one visit, and you get a walkthrough of what it does and what it does not do.",
-  },
-  {
-    number: "04",
-    title: "Someone local to call",
-    body: "Filter changes and questions stay with the same service area. Hours and the phone number are on every page.",
-  },
-];
-
-export default function Home() {
+export default function HomePage() {
+  const services = serviceHubs();
   return (
     <>
-      <section className="relative overflow-hidden bg-water-gradient">
-        <div className="relative mx-auto grid max-w-6xl items-start gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2">
+      <section className="bg-water-gradient">
+        <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-20">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-brand-100 ring-1 ring-white/20">
-              <DropletIcon className="h-4 w-4" />
-              Serving Columbus and central Ohio
-            </span>
-            <h1 className="mt-5 text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl">
-              Whole-home water filtration in Columbus, Ohio
-            </h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-brand-100">
-              Softeners, reverse osmosis, and well-water systems for houses on
-              Columbus water and on private wells. Start with a free test.{" "}
-              {site.hours.display}.
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand-200">
+              Columbus and central Ohio
             </p>
-            <div className="mt-6">
-              <PhoneLink
-                prefix="Or call"
-                className="inline-flex items-center text-base font-semibold text-white underline decoration-white/40"
-              />
-            </div>
-            <ul className="mt-8 space-y-2 text-sm text-brand-100">
+            <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+              Water treatment in Columbus, Ohio
+            </h1>
+            <p className="mt-5 text-lg leading-relaxed text-brand-100">
+              Columbus Water &amp; Power already softens tap water to about 7
+              grains per gallon and says a home filter is not required for
+              safety. We test at the house for taste, scale, and the occasional
+              well, then recommend a softener, a filter, reverse osmosis, or
+              nothing.
+            </p>
+            <ul className="mt-6 space-y-2 text-sm text-brand-50">
               {checks.map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <CheckIcon className="h-4 w-4 text-teal-accent" />
-                  {item}
-                </li>
+                <li key={item}>{item}</li>
               ))}
             </ul>
+            <p className="mt-6 text-sm text-brand-100">
+              Prefer to call? <PhoneLink className="font-semibold text-white underline" />
+            </p>
           </div>
           <LeadForm variant="hero" pagePath="/" />
         </div>
       </section>
-
-      <section className="bg-water-soft py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-3xl font-bold tracking-tight text-brand-950">
-            What Columbus water is actually like
-          </h2>
-          <div className="mt-6 max-w-3xl space-y-4 text-base leading-relaxed text-brand-800">
-            <p>{columbusSupply.overview}</p>
-            <p>{columbusSupply.hardnessIntro}</p>
-            <p>{columbusSupply.scale}</p>
-            <p>{columbusSupply.chlorine}</p>
-          </div>
-          <p className="mt-4 text-sm text-brand-600">
-            Sources:{" "}
-            <a className="underline" href={sources.hardness.href}>
-              {sources.hardness.label}
-            </a>
-            {" · "}
-            <a className="underline" href={sources.ccr2025.href}>
-              {sources.ccr2025.label}
-            </a>
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <h2 className="text-3xl font-bold tracking-tight text-brand-950">
+          What the 2025 Columbus report actually says
+        </h2>
+        <div className="mt-6 space-y-4 text-base leading-relaxed text-brand-800">
+          <p>
+            Three plants serve the city. Dublin Road (Scioto River) averaged
+            7.3 grains per gallon in 2025, Hap Cremean (Hoover Reservoir) 5.7,
+            and Parsons Avenue (wells) 7.2. The system summary is 115 mg/L.
+            The city calls that moderately hard.
           </p>
-          <Link
-            href="/services/hard-water"
-            className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-brand-700"
-          >
-            Hard water treatment
-            <ArrowRightIcon className="h-4 w-4" />
+          <p>
+            Nitrate ran higher at Dublin Road, where the utility added anion
+            exchange. Lead’s 2023 90th percentile was 1.3 ppb, with none of 50
+            sites over the action level. PFAS results the city publishes are
+            low-level detections, and the city says they would meet the
+            standards it cites. None of that is a reason to imply the water is
+            unsafe.
+          </p>
+          <p>
+            <Link href="/columbus-water-hardness/" className="font-semibold text-brand-700 underline">
+              Hardness by plant
+            </Link>
+            {" · "}
+            <Link href="/columbus-water-quality/" className="font-semibold text-brand-700 underline">
+              Water quality report
+            </Link>
+          </p>
+        </div>
+        <div className="mt-12 grid gap-4 sm:grid-cols-2">
+          {services.map((service) => (
+            <Link
+              key={service.path}
+              href={service.path}
+              className="rounded-2xl border border-brand-100 bg-white p-5 shadow-card hover:border-brand-300"
+            >
+              <span className="flex items-center justify-between gap-3 text-base font-bold text-brand-950">
+                {service.primaryKw}
+                <ArrowRightIcon className="h-4 w-4 shrink-0 text-brand-600" />
+              </span>
+            </Link>
+          ))}
+        </div>
+        <p className="mt-10 text-sm text-brand-700">
+          City, village, and neighborhood pages are grouped by county on the{" "}
+          <Link href="/service-area/" className="font-semibold underline">
+            service area
           </Link>
-        </div>
+          . Each one uses that place’s supplier and hardness, or says the
+          supplier is not confirmed.
+        </p>
       </section>
-
-      <section className="py-16">
+      <section className="bg-brand-950 py-16 text-white">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 className="text-3xl font-bold tracking-tight text-brand-950">
-              Services
-            </h2>
-            <Link href="/services" className="text-sm font-semibold text-brand-700">
-              All services
-            </Link>
-          </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            {services.map((service) => (
-              <Link
-                key={service.slug}
-                href={`/services/${service.slug}`}
-                className="flex gap-4 rounded-2xl border border-brand-100 bg-white p-6 shadow-card hover:border-brand-300"
-              >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-water-gradient text-white">
-                  <Icon name={service.icon} className="h-7 w-7" />
-                </span>
-                <span>
-                  <span className="block font-bold text-brand-950">{service.name}</span>
-                  <span className="mt-1 block text-sm text-brand-700">
-                    {service.keyword} in Columbus, OH
-                  </span>
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-brand-950 py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <h2 className="text-3xl font-bold text-white">How a visit works</h2>
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map((step) => (
-              <div key={step.number}>
-                <span className="text-3xl font-bold text-teal-accent">{step.number}</span>
-                <h3 className="mt-2 text-lg font-bold text-white">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-brand-200">{step.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 className="text-3xl font-bold tracking-tight text-brand-950">
-              Cities we cover
-            </h2>
-            <Link href="/service-area" className="text-sm font-semibold text-brand-700">
-              Full service area
-            </Link>
-          </div>
-          <ul className="mt-6 flex flex-wrap gap-2">
-            {locations.map((loc) => (
-              <li key={loc.slug}>
-                <Link
-                  href={`/service-area/${loc.slug}`}
-                  className="inline-block rounded-full border border-brand-200 px-4 py-2 text-sm text-brand-800 hover:bg-brand-50"
-                >
-                  {loc.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <h2 className="text-3xl font-bold">How a visit works</h2>
+          <ol className="mt-8 grid gap-6 sm:grid-cols-3">
+            <li>
+              <p className="text-lg font-bold">1. Free water test</p>
+              <p className="mt-2 text-sm leading-relaxed text-brand-100">
+                Hardness, chlorine, TDS, iron, and odor at the house. No prices on this site.
+              </p>
+            </li>
+            <li>
+              <p className="text-lg font-bold">2. A straight recommendation</p>
+              <p className="mt-2 text-sm leading-relaxed text-brand-100">
+                Softener, filter, reverse osmosis, well treatment, or nothing. The test decides.
+              </p>
+            </li>
+            <li>
+              <p className="text-lg font-bold">3. Install at the house</p>
+              <p className="mt-2 text-sm leading-relaxed text-brand-100">
+                {site.hours.display}. There is no showroom address.
+              </p>
+            </li>
+          </ol>
         </div>
       </section>
     </>

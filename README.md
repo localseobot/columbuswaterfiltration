@@ -1,34 +1,37 @@
 # Columbus Water Filtration
 
-Marketing site for water filtration in Columbus, Ohio and central Ohio. Next.js App Router, TypeScript, Tailwind CSS.
+Marketing site for water treatment in Columbus, Ohio and central Ohio. Next.js App Router, TypeScript, Tailwind CSS.
 
 ## Pages
 
-Routes are generated from `src/data/services.ts` and `src/data/locations.ts`. Adding a service or a city publishes the new URLs and adds them to the sitemap. Service × city pages live at `/services/[service]/[city]`.
+The page list is `data/page_matrix.csv` (243 URLs). Places, suppliers, hardness, and ZIP codes are `data/locations.csv`. Service clusters are `data/clusters.json`. Keyword notes are `data/keywords.csv`. Cited water facts are `data/local_facts.md`. The spec is `data/page_plan.md`.
 
-| Route | Description |
+A row with `publish_gate` other than `ok` is generated as `noindex` and left out of the sitemap. ZIP codes whose source starts with `approx` are not shown.
+
+| Pattern | Example |
 | --- | --- |
-| `/` | Homepage and lead form |
-| `/services` | Service index |
-| `/services/[slug]` | One service, plus links to every city |
-| `/services/[slug]/[location]` | That service in one city, using that city's water facts |
-| `/service-area` | Location index |
-| `/service-area/[slug]` | One city, township, or neighborhood |
-| `/free-water-test` | Lead form |
-| `/about`, `/contact` | Company and contact |
-| `/dashboard` | Lead dashboard (noindex). Magic-link sign-in. |
+| `/` | Homepage |
+| `/{service}/` | `/water-softener-installation/` |
+| `/{service}/{place}/` | `/water-softener-installation/dublin-oh/` |
+| `/service-area/` | Index by county |
+| `/service-area/{place}/` | `/service-area/westerville-oh/` |
+| `/service-area/columbus-oh/{neighborhood}/` | `/service-area/columbus-oh/clintonville/` |
+| `/service-area/{county}-county-oh/` | `/service-area/licking-county-oh/` |
+| `/well-water-treatment/{county}-county-oh/` | County well pages |
+| `/columbus-water-hardness/`, `/columbus-water-quality/` | Cited local data |
+| `/dashboard` | Lead dashboard (noindex) |
 
-Location records carry the unique facts (utility, hardness key, ZIP codes, nearby places, notes). Do not copy Columbus plant numbers onto a different supplier. Leave `hardnessKey` null when there is no cited figure.
+There is no Heath softener URL. Circleville’s 25 gpg well water is called out from the city report. Columbus pages do not say the water is unsafe.
 
 ## Business details
 
 Name, phone, email, and hours: [`src/lib/site.ts`](src/lib/site.ts).
 
-The public click-to-call number can be overridden with `TRACKING_NUMBER` (see `/api/site-config`) without editing pages. There is no street address.
+`TRACKING_NUMBER` overrides the click-to-call number via `/api/site-config`. There is no street address.
 
 ## Leads
 
-Forms post to `POST /api/lead`. Leads are stored and emailed. See [`.env.example`](.env.example) for Resend, Upstash Redis, the dashboard secret, and the optional GoHighLevel ledger.
+Forms post to `POST /api/lead`. See [`.env.example`](.env.example) for Resend, Upstash Redis, the dashboard secret, and the optional GoHighLevel ledger.
 
 ```bash
 npm install

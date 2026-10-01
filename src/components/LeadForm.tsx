@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState, type FormEvent } from "react";
-import { formOptions } from "@/data/catalog";
+import { FORM_OPTIONS } from "@/data/form-options";
 import { CheckIcon } from "./Icons";
 import PhoneLink from "./PhoneLink";
 
@@ -16,7 +16,7 @@ const inputClass =
 
 const labelClass = "mb-1.5 block text-sm font-medium text-brand-900";
 
-const options = formOptions();
+const options: string[] = [...FORM_OPTIONS];
 
 export default function LeadForm({
   variant = "quote",

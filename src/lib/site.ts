@@ -47,8 +47,8 @@ export const site = {
 
 export const nav = [
   { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
-  { href: "/service-area", label: "Service Area" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/service-area/", label: "Service Area" },
+  { href: "/columbus-water-hardness/", label: "Hardness" },
+  { href: "/about/", label: "About" },
+  { href: "/contact/", label: "Contact" },
 ] as const;
