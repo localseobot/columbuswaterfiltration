@@ -309,7 +309,7 @@ export default function DashboardApp() {
                         {[lead.service, lead.place].filter(Boolean).join(" · ") || "—"}
                       </div>
                       {!lead.billable && (
-                        <div className="mt-1 text-xs text-teal-accent">
+                        <div className="mt-1 text-xs text-brick">
                           {lead.credited ? "Credited" : lead.duplicate ? "Duplicate, not billable" : "Not billable"}
                         </div>
                       )}

@@ -223,7 +223,7 @@ export default function LeadForm({
       <button
         type="submit"
         disabled={pending}
-        className="mt-5 w-full rounded-full bg-brand-600 px-6 py-3.5 text-base font-semibold text-white shadow-sm transition-colors hover:bg-brand-700 disabled:opacity-60"
+        className="mt-5 w-full rounded-full bg-brick px-6 py-3.5 text-base font-semibold text-white shadow-sm transition-colors hover:bg-[#962f23] disabled:opacity-60"
       >
         {pending ? "Sending…" : "Request my free water test"}
       </button>

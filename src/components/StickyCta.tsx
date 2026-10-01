@@ -12,7 +12,7 @@ export default function StickyCta() {
         />
         <a
           href="#quote"
-          className="inline-flex items-center justify-center rounded-full bg-brand-600 px-4 py-3 text-sm font-semibold text-white"
+          className="inline-flex items-center justify-center rounded-full bg-brick px-4 py-3 text-sm font-semibold text-white"
         >
           Free water test
         </a>

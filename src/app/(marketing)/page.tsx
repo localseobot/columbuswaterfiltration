@@ -2,7 +2,10 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import LeadForm from "@/components/LeadForm";
 import PhoneLink from "@/components/PhoneLink";
-import { serviceHubs } from "@/data/dataset";
+import Photo, { photoExists } from "@/components/Photo";
+import Skyline from "@/components/Skyline";
+import { allPages, serviceHubs } from "@/data/dataset";
+import { photos } from "@/lib/photos";
 import { pageMetadata } from "@/lib/seo";
 import { site } from "@/lib/site";
 import { ArrowRightIcon } from "@/components/Icons";
@@ -14,6 +17,37 @@ export const metadata: Metadata = pageMetadata({
   path: "/",
 });
 
+/** Neighborhoods and suburbs shown in the "Around Columbus" strip, in rough north-to-south order. */
+const localPlaces = [
+  "Worthington",
+  "Westerville",
+  "Dublin",
+  "Clintonville",
+  "Upper Arlington",
+  "Short North",
+  "Victorian Village",
+  "Grandview Heights",
+  "Gahanna",
+  "Bexley",
+  "German Village",
+  "Hilliard",
+  "Canal Winchester",
+];
+
+function localLinks() {
+  const pages = allPages();
+  return localPlaces.flatMap((name) => {
+    const page = pages.find(
+      (p) =>
+        !p.serviceSlug &&
+        p.indexable &&
+        p.locationName === name &&
+        (p.pageType === "neighborhood" || p.pageType === "location-hub"),
+    );
+    return page ? [{ name, href: page.path }] : [];
+  });
+}
+
 const checks = [
   "Hardness, in grains per gallon",
   "Chlorine taste and odor",
@@ -23,13 +57,16 @@ const checks = [
 
 export default function HomePage() {
   const services = serviceHubs();
+  const places = localLinks();
+  const hasPeoplePhotos = photoExists(photos.technician) || photoExists(photos.kitchen);
   return (
     <>
-      <section className="bg-water-gradient">
-        <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-20">
+      <section className="relative overflow-hidden bg-water-gradient">
+        <Skyline className="pointer-events-none absolute inset-x-0 bottom-0 h-24 w-full text-white/[0.07] sm:h-32" />
+        <div className="relative mx-auto grid max-w-6xl items-start gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2 lg:py-20">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand-200">
-              Columbus and central Ohio
+              Serving the 614 · Columbus and central Ohio
             </p>
             <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
               Water treatment in Columbus, Ohio
@@ -104,6 +141,98 @@ export default function HomePage() {
           . Each one uses that place’s supplier and hardness, or says the
           supplier is not confirmed.
         </p>
+      </section>
+      <section className="bg-cream py-16">
+        <div
+          className={`mx-auto grid max-w-6xl items-center gap-10 px-4 sm:px-6 ${
+            hasPeoplePhotos ? "lg:grid-cols-2" : ""
+          }`}
+        >
+          {hasPeoplePhotos && (
+            <div className="grid grid-cols-5 gap-3">
+              <Photo
+                photo={photos.technician}
+                className="col-span-3 aspect-[4/5] rounded-2xl shadow-card"
+                sizes="(min-width: 1024px) 30vw, 60vw"
+              />
+              <Photo
+                photo={photos.kitchen}
+                className="col-span-2 mt-12 aspect-[3/4] rounded-2xl shadow-card"
+                sizes="(min-width: 1024px) 20vw, 40vw"
+              />
+            </div>
+          )}
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brick">
+              At your kitchen sink
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-brand-950">
+              A person at the house, not a showroom
+            </h2>
+            <div className="mt-5 space-y-4 text-base leading-relaxed text-brand-800">
+              <p>
+                Someone comes to your house, runs the water, and tests it in
+                front of you. You see the hardness number and the chlorine
+                reading yourself, and you can ask whatever you want.
+              </p>
+              <p>
+                Whether it is a brick double in German Village, a ranch in
+                Hilliard, or a farmhouse on a well out past Delaware, the
+                answer comes from your water, not a package deal.
+              </p>
+            </div>
+            <Link
+              href="/free-water-test/"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-brick px-6 py-3 text-sm font-semibold text-white hover:bg-[#962f23]"
+            >
+              Book a free water test
+              <ArrowRightIcon className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <div className="grid items-center gap-10 lg:grid-cols-5">
+          <div className="lg:col-span-3">
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brick">
+              Around Columbus
+            </p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-brand-950">
+              Your neighborhood, your water
+            </h2>
+            <p className="mt-4 text-base leading-relaxed text-brand-800">
+              Most of the city drinks from the Scioto, Hoover Reservoir, or the
+              south-side wells. The suburbs and the countryside around them can
+              be on a different supplier entirely. Pick your area to see what
+              comes out of the tap there.
+            </p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {places.map((place) => (
+                <li key={place.href}>
+                  <Link
+                    href={place.href}
+                    className="inline-block rounded-full border border-brand-200 bg-white px-4 py-2 text-sm font-medium text-brand-900 hover:border-brick hover:text-brick"
+                  >
+                    {place.name}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/service-area/"
+                  className="inline-block rounded-full bg-navy px-4 py-2 text-sm font-semibold text-white"
+                >
+                  All areas
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <Photo
+            photo={photos.skyline}
+            className="aspect-[4/3] rounded-2xl shadow-card lg:col-span-2"
+            sizes="(min-width: 1024px) 40vw, 100vw"
+          />
+        </div>
       </section>
       <section className="bg-brand-950 py-16 text-white">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">

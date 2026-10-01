@@ -15,7 +15,13 @@
 
   --color-teal-accent: #0fb5ba;
 
+  /* Local accents: navy, German Village brick, and a warm cream. */
+  --color-navy: #12304f;
+  --color-brick: #b23a2c;
+  --color-cream: #faf6ef;
+
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-zilla-slab), Georgia, serif;
 
   --shadow-card: 0 1px 3px rgba(15, 40, 71, 0.06),
     0 8px 24px rgba(15, 40, 71, 0.08);
@@ -39,9 +45,14 @@ body {
 
 /* Water-themed background utilities */
 .bg-water-gradient {
-  background: linear-gradient(135deg, #0c2847 0%, #0a5eab 55%, #0fb5ba 135%);
+  background: linear-gradient(160deg, #0f2a46 0%, #12304f 60%, #1b4469 100%);
 }
 
 .bg-water-soft {
   background: linear-gradient(180deg, #eff9ff 0%, #ffffff 100%);
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
 }
