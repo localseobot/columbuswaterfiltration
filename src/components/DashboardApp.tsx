@@ -71,7 +71,6 @@ export default function DashboardApp() {
   const [rowMsg, setRowMsg] = useState<Record<string, string>>({});
 
   const load = useCallback(async (t: string) => {
-    setError("");
     const res = await fetch("/api/buyer/leads", {
       headers: { Authorization: `Bearer ${t}` },
       cache: "no-store",
@@ -87,24 +86,33 @@ export default function DashboardApp() {
       setError(body.error || "Could not load leads.");
       return;
     }
+    setError("");
     setData(body);
   }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const fromUrl = params.get("t");
+    const next = fromUrl || localStorage.getItem(TOKEN_KEY) || "";
     if (fromUrl) {
       localStorage.setItem(TOKEN_KEY, fromUrl);
       window.history.replaceState(null, "", window.location.pathname);
-      setToken(fromUrl);
-    } else {
-      setToken(localStorage.getItem(TOKEN_KEY) || "");
     }
-    setReady(true);
+    queueMicrotask(() => {
+      setToken(next);
+      setReady(true);
+    });
   }, []);
 
   useEffect(() => {
-    if (token) load(token);
+    if (!token) return;
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) void load(token);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [token, load]);
 
   async function sendLink(e: React.FormEvent) {
