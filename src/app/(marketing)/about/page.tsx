@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Photo from "@/components/Photo";
+import { photos } from "@/lib/photos";
 import { site } from "@/lib/site";
 import { pageMetadata } from "@/lib/seo";
 import { columbusSupply, sources } from "@/lib/water-facts";
@@ -24,11 +26,20 @@ export default function AboutPage() {
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-brand-100">
             {site.name} schedules free in-home water tests for houses in
-            Columbus and central Ohio. There is no showroom address. The work
+            Columbus and central Ohio, from the brick streets of German Village
+            to wells out in Delaware and Pickaway counties. There is no
+            showroom address. The work
             happens at the house.
           </p>
         </div>
       </section>
+      <div className="mx-auto max-w-3xl px-4 pt-12 sm:px-6">
+        <Photo
+          photo={photos.technician}
+          className="aspect-[16/9] rounded-2xl shadow-card"
+          sizes="(min-width: 768px) 768px, 100vw"
+        />
+      </div>
       <article className="mx-auto max-w-3xl space-y-6 px-4 py-16 text-base leading-relaxed text-brand-800 sm:px-6">
         <p>
           Columbus water is moderately hard after the utility softens it, and it

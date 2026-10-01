@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { nav } from "@/lib/site";
-import { DropletIcon } from "./Icons";
+import Logo from "./Logo";
 import PhoneLink from "./PhoneLink";
 
 export default function Header() {
@@ -14,20 +14,10 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2.5"
+          aria-label="Columbus Water Filtration home"
           onClick={() => setOpen(false)}
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-water-gradient text-white shadow-sm">
-            <DropletIcon className="h-6 w-6" />
-          </span>
-          <span className="leading-tight">
-            <span className="block text-base font-bold tracking-tight text-brand-950">
-              Columbus Water
-            </span>
-            <span className="block text-xs font-medium uppercase tracking-[0.16em] text-teal-accent">
-              Filtration
-            </span>
-          </span>
+          <Logo />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -46,7 +36,7 @@ export default function Header() {
           <PhoneLink className="text-sm font-semibold text-brand-800" />
           <Link
             href="/free-water-test"
-            className="rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-brand-700"
+            className="rounded-full bg-brick px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#962f23]"
           >
             Free Water Test
           </Link>
@@ -94,7 +84,7 @@ export default function Header() {
             <Link
               href="/free-water-test"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-brand-600 px-5 py-3 text-center text-base font-semibold text-white"
+              className="mt-2 rounded-full bg-brick px-5 py-3 text-center text-base font-semibold text-white"
             >
               Get a Free Water Test
             </Link>

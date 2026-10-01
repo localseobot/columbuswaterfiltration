@@ -2,7 +2,9 @@ import Link from "next/link";
 import { pageH1 } from "@/data/copy";
 import { countyHubPages, serviceHubs } from "@/data/dataset";
 import { site, nav } from "@/lib/site";
-import { DropletIcon, MailIcon, ClockIcon } from "./Icons";
+import { MailIcon, ClockIcon } from "./Icons";
+import Logo from "./Logo";
+import Skyline from "./Skyline";
 import PhoneLink from "./PhoneLink";
 
 export default function Footer() {
@@ -10,19 +12,15 @@ export default function Footer() {
   const counties = countyHubPages();
   return (
     <footer className="bg-brand-950 text-brand-100">
+      <Skyline className="block h-16 w-full bg-white text-brand-950 sm:h-20" />
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white">
-                <DropletIcon className="h-6 w-6" />
-              </span>
-              <span className="text-base font-bold text-white">{site.name}</span>
-            </div>
+            <Logo tone="dark" />
             <p className="mt-4 text-sm leading-relaxed text-brand-200">
-              Free in-home water tests for Columbus and central Ohio. Taste,
-              scale, and well-water problems. City water is treated to meet
-              safety standards.
+              Free in-home water tests from Clintonville to Canal Winchester,
+              and everywhere around the 614. Taste, scale, and well-water
+              problems. City water is treated to meet safety standards.
             </p>
           </div>
           <div>
@@ -90,12 +88,12 @@ export default function Footer() {
                   href={`mailto:${site.email}`}
                   className="inline-flex items-center gap-2 text-brand-200 hover:text-white"
                 >
-                  <MailIcon className="h-4 w-4 text-teal-accent" />
+                  <MailIcon className="h-4 w-4 text-brick" />
                   {site.email}
                 </a>
               </li>
               <li className="flex items-center gap-2 text-brand-200">
-                <ClockIcon className="h-4 w-4 text-teal-accent" />
+                <ClockIcon className="h-4 w-4 text-brick" />
                 {site.hours.display}
               </li>
             </ul>

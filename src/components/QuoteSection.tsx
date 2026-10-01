@@ -7,7 +7,7 @@ export default function QuoteSection() {
     <section id="quote" className="scroll-mt-20 bg-water-soft py-16 sm:py-20">
       <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 sm:px-6 lg:grid-cols-2">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-teal-accent">
+          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brick">
             Free water test
           </p>
           <h2 className="mt-3 text-3xl font-bold tracking-tight text-brand-950 sm:text-4xl">

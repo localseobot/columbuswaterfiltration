@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Zilla_Slab } from "next/font/google";
 import "./globals.css";
 import JsonLd from "@/components/JsonLd";
 import { getTrackingNumber } from "@/lib/phone";
@@ -9,6 +9,12 @@ import { site } from "@/lib/site";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const zillaSlab = Zilla_Slab({
+  variable: "--font-zilla-slab",
+  subsets: ["latin"],
+  weight: ["600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -34,7 +40,7 @@ export default function RootLayout({
     telephone: phone.e164 || phone.display,
   };
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${geistSans.variable} ${zillaSlab.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-white text-brand-950">
         <JsonLd data={schema} />
         {children}

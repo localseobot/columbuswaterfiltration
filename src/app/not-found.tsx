@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <main className="mx-auto max-w-xl px-4 py-24 text-center">
-      <p className="text-sm font-semibold uppercase tracking-wide text-teal-accent">404</p>
+      <p className="text-sm font-semibold uppercase tracking-wide text-brick">404</p>
       <h1 className="mt-3 text-4xl font-bold text-brand-950">Page not found</h1>
       <p className="mt-4 text-brand-700">
         That address is not on this site. Try the services list or request a
