@@ -253,7 +253,7 @@ export default function HomePage() {
             <li>
               <p className="text-lg font-bold">3. Install at the house</p>
               <p className="mt-2 text-sm leading-relaxed text-brand-100">
-                {site.hours.display}. There is no showroom address.
+                {site.hours.display}. The install happens at your house.
               </p>
             </li>
           </ol>

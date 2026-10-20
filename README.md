@@ -27,7 +27,7 @@ There is no Heath softener URL. Circleville’s 25 gpg well water is called out 
 
 Name, phone, email, and hours: [`src/lib/site.ts`](src/lib/site.ts).
 
-`TRACKING_NUMBER` overrides the click-to-call number via `/api/site-config`. There is no street address.
+`TRACKING_NUMBER` overrides the click-to-call number via `/api/site-config`. The office address lives in `src/lib/site.ts`.
 
 ## Leads
 
