@@ -9,7 +9,7 @@ import { columbusSupply, sources } from "@/lib/water-facts";
 export const metadata: Metadata = pageMetadata({
   title: "About Columbus Water Filtration | Central Ohio Water Tests",
   description:
-    "Columbus Water Filtration schedules free in-home water tests for Columbus and central Ohio. No showroom address. Recommendations follow the test, not a package.",
+    "Columbus Water Filtration schedules free in-home water tests for Columbus and central Ohio. Recommendations follow the test, not a package.",
   path: "/about",
 });
 
@@ -27,9 +27,8 @@ export default function AboutPage() {
           <p className="mt-5 text-lg leading-relaxed text-brand-100">
             {site.name} schedules free in-home water tests for houses in
             Columbus and central Ohio, from the brick streets of German Village
-            to wells out in Delaware and Pickaway counties. There is no
-            showroom address. The work
-            happens at the house.
+            to wells out in Delaware and Pickaway counties. Our office is at{" "}
+            {site.address.display}, but the work happens at the house.
           </p>
         </div>
       </section>

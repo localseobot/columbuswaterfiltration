@@ -2,7 +2,7 @@ import Link from "next/link";
 import { pageH1 } from "@/data/copy";
 import { countyHubPages, serviceHubs } from "@/data/dataset";
 import { site, nav } from "@/lib/site";
-import { MailIcon, ClockIcon } from "./Icons";
+import { MailIcon, ClockIcon, MapPinIcon } from "./Icons";
 import Logo from "./Logo";
 import Skyline from "./Skyline";
 import PhoneLink from "./PhoneLink";
@@ -92,6 +92,21 @@ export default function Footer() {
                   {site.email}
                 </a>
               </li>
+              <li>
+                <a
+                  href={site.address.mapsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-start gap-2 text-brand-200 hover:text-white"
+                >
+                  <MapPinIcon className="mt-0.5 h-4 w-4 shrink-0 text-brick" />
+                  <span>
+                    {site.address.street} {site.address.suite}
+                    <br />
+                    {site.address.city}, {site.address.state} {site.address.zip}
+                  </span>
+                </a>
+              </li>
               <li className="flex items-center gap-2 text-brand-200">
                 <ClockIcon className="h-4 w-4 text-brick" />
                 {site.hours.display}
@@ -100,7 +115,7 @@ export default function Footer() {
           </div>
         </div>
         <p className="mt-12 border-t border-white/10 pt-6 text-xs text-brand-300">
-          © {new Date().getFullYear()} {site.name}. Service-area business. No published street address.
+          © {new Date().getFullYear()} {site.name}. {site.address.display}.
         </p>
       </div>
     </footer>

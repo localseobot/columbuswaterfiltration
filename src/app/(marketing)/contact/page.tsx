@@ -21,7 +21,7 @@ export default function ContactPage() {
           </h1>
           <p className="mt-4 text-lg text-brand-100">
             Call, email, or send the form. We cover Columbus and the cities on
-            the service-area page. There is no street address to visit.
+            the service-area page. Tests and installs happen at your house.
           </p>
         </div>
       </section>
@@ -40,6 +40,21 @@ export default function ContactPage() {
               <dd>
                 <a className="text-brand-700" href={`mailto:${site.email}`}>
                   {site.email}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm font-semibold text-brand-950">Office</dt>
+              <dd>
+                <a
+                  className="text-brand-700"
+                  href={site.address.mapsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {site.address.street} {site.address.suite}
+                  <br />
+                  {site.address.city}, {site.address.state} {site.address.zip}
                 </a>
               </dd>
             </div>

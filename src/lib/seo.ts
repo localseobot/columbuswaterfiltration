@@ -70,8 +70,10 @@ export function businessJsonLd() {
     description: site.description,
     address: {
       "@type": "PostalAddress",
-      addressLocality: site.area.city,
-      addressRegion: site.area.state,
+      streetAddress: `${site.address.street} ${site.address.suite}`,
+      addressLocality: site.address.city,
+      addressRegion: site.address.state,
+      postalCode: site.address.zip,
       addressCountry: "US",
     },
     openingHoursSpecification: {

@@ -7,8 +7,9 @@
  * (see /api/site-config) so a call-tracking line can be swapped without a
  * code change.
  *
- * This is a service-area business. Do not add a street address unless it is
- * a real storefront the renter wants published. Do not add ratings,
+ * The street address below is the office the renter asked to publish. Work
+ * still happens at the customer's house, so do not describe it as a
+ * showroom. Do not add ratings,
  * review counts, license numbers, or years in business here.
  *
  * The phone number below was already in the repo. It has not been verified
@@ -23,7 +24,16 @@ export const site = {
   phone: "(614) 490-2100",
   phoneHref: "tel:+16144902100",
   email: "info@columbuswaterfiltration.com",
-  /** City and state only. There is no published street address. */
+  address: {
+    street: "200 E Campus View Blvd",
+    suite: "STE 200",
+    city: "Columbus",
+    state: "OH",
+    zip: "43235",
+    display: "200 E Campus View Blvd STE 200, Columbus, OH 43235",
+    mapsHref:
+      "https://www.google.com/maps/search/?api=1&query=200+E+Campus+View+Blvd+STE+200%2C+Columbus%2C+OH+43235",
+  },
   area: {
     city: "Columbus",
     state: "OH",
