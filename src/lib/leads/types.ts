@@ -61,7 +61,7 @@ export type RecordResult = {
 };
 
 export interface LeadLedger {
-  readonly driver: "file" | "redis" | "ghl";
+  readonly driver: "file" | "redis" | "ghl" | "pg";
   record(input: LeadInput): Promise<RecordResult>;
   list(limit?: number): Promise<Lead[]>;
   get(id: string): Promise<Lead | null>;
